@@ -277,6 +277,10 @@ A RESTful API for managing a collection of cities, supporting CRUD operations (C
 
    ```
    npx jest
-   ```
+   ``` 
+
+   **Production Url**
+
+   `https://cities-crud-apis-new.onrender.com/api-docs`
 
 

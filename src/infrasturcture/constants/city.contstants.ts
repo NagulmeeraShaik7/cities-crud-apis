@@ -17,11 +17,10 @@ export const CITY_MESSAGES = {
  * @property {string} SORT_BY - Default field to sort by
  * @property {string} ORDER - Default order of sorting (asc or desc)
  */
-
 export const DEFAULTS = {
   SORT_BY: "name",
   ORDER: "asc"
-}; 
+};
 
 /**
  * Route paths for city-related operations
@@ -29,7 +28,6 @@ export const DEFAULTS = {
  * @property {string} BASE - Base path for city routes
  * @property {string} BY_ID - Path for operations on a specific city by ID
  */
-
 export const CITY_ROUTE_PATHS = {
   BASE: "/",
   BY_ID: "/:id"
@@ -40,9 +38,6 @@ export const CITY_ROUTE_PATHS = {
  * @constant {string}
  */
 export const CITY_ROUTE_TAG = "Cities";
-
-
-
 
 /**
  * Error messages related to city operations
@@ -66,7 +61,6 @@ export const LOGGER_PREFIX = {
   ERROR: "[ERROR]"
 };
 
-
 /**
  * Constants for search operations
  * @constant {Object}
@@ -76,7 +70,6 @@ export const LOGGER_PREFIX = {
  * @property {string} MONGO_OR - MongoDB operator for logical OR
  * @property {string} REGEX - MongoDB operator for regex search
  * @description These constants are used to build search queries in the application.
- * They help in defining the types of searches, regex options, and MongoDB operators used in
  */
 export const SEARCH_CONSTANTS = {
   STRING_TYPE: "String",
@@ -94,9 +87,11 @@ export const SEARCH_CONSTANTS = {
  * @property {string} VERSION - Version of the API
  * @property {string} DESCRIPTION - Description of the API
  * @property {string} LOCAL_SERVER_DESCRIPTION - Description for the local server
+ * @property {string} PRODUCTION_SERVER_DESCRIPTION - Description for the production server
  * @property {number} DEFAULT_PORT - Default port for the API
  * @property {string} PROTOCOL - Protocol used by the API (http or https)
  * @property {string} HOST - Hostname for the API 
+ * @property {string} PRODUCTION_URL - Production server URL
  * @property {string} OBJECT_TYPE - Type for object schemas
  * @property {string} STRING_TYPE - Type for string schemas
  * @property {string} NUMBER_TYPE - Type for number schemas
@@ -105,9 +100,7 @@ export const SEARCH_CONSTANTS = {
  * @property {Object} FORMATS - Formats used in the API (e.g., date-time)
  * @property {Object} EXAMPLES - Example values for various fields in the API  
  * @description These constants are used to configure Swagger documentation for the API.
- * They define the OpenAPI version, API title, version, description, server details, and
  */
-
 export const SWAGGER = {
   OPENAPI_VERSION: "3.0.0",
   TITLE: "City Management API",
@@ -115,9 +108,11 @@ export const SWAGGER = {
   DESCRIPTION:
     "API for managing a collection of cities with CRUD operations, pagination, filtering, sorting, and searching.",
   LOCAL_SERVER_DESCRIPTION: "Local server",
+  PRODUCTION_SERVER_DESCRIPTION: "Production server",
   DEFAULT_PORT: 3000,
   PROTOCOL: "http",
   HOST: "localhost",
+  PRODUCTION_URL: process.env.PRODUCTION_URL || "https://cities-crud-apis-new.onrender.com",
   OBJECT_TYPE: "object",
   STRING_TYPE: "string",
   NUMBER_TYPE: "number",
@@ -144,7 +139,6 @@ export const SWAGGER = {
  * @property {string} CITY - Schema for city objects
  * @property {string} ERROR - Schema for error responses
  * @description These schemas define the structure of city objects and error responses in the API.
- * They are used to generate API documentation and validate requests and responses.
  */
 export const SCHEMAS = {
   CITY: "City",
@@ -163,9 +157,7 @@ export const SCHEMAS = {
  * @property {string} CREATED_AT - Timestamp when the city was created
  * @property {string} UPDATED_AT - Timestamp when the city was last updated
  * @description These fields represent the properties of a city document in the database.
- * They are used in the city model and Swagger documentation to define the structure of city data.
  */
-
 export const CITY_FIELDS = {
   ID: "_id",
   NAME: "name",
@@ -184,9 +176,7 @@ export const CITY_FIELDS = {
  * @property {string} MESSAGE - Error message describing the error
  * @property {string} STATUS - HTTP status code for the error
  * @description These fields are used in error responses to provide information about the error that occurred.
- * They are included in the Swagger documentation to define the structure of error responses.
  */
-
 export const ERROR_FIELDS = {
   ERROR: "error",
   MESSAGE: "message",
@@ -203,8 +193,6 @@ export const ERROR_FIELDS = {
  * @property {string} STATUS_KEY - Key used in error responses to indicate the HTTP status code
  * @property {string} LOG_PREFIX - Prefix used in logs for error messages
  */
-
-
 export const ERROR_CONSTANTS = {
   DEFAULT_MESSAGE: "Internal Server Error",
   DEFAULT_STATUS: 500,
@@ -212,6 +200,29 @@ export const ERROR_CONSTANTS = {
   MESSAGE_KEY: "message",
   STATUS_KEY: "status",
   LOG_PREFIX: "Error"
+};
+
+/**
+ * Constants for CORS configuration
+ * @constant {Object}
+ * @property {Object} METHODS - HTTP methods allowed in CORS
+ * @property {Object} HEADERS - HTTP headers allowed in CORS
+ * @property {string} CORS_ERROR - Error message for disallowed CORS origins
+ * @description These constants define the allowed methods, headers, and error messages for CORS configuration.
+ */
+export const CORS_CONSTANTS = {
+  METHODS: {
+    GET: "GET",
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE",
+    OPTIONS: "OPTIONS"
+  },
+  HEADERS: {
+    CONTENT_TYPE: "Content-Type",
+    AUTHORIZATION: "Authorization"
+  },
+  CORS_ERROR: "Not allowed by CORS"
 };
 
 /**
@@ -224,7 +235,6 @@ export const ERROR_CONSTANTS = {
  * @property {Object} ERRORS - Error messages related to server configuration
  * @property {Object} LOGS - Log messages for various server events
  */
-
 export const SERVER_CONSTANTS = {
   DEFAULTS: {
     PORT: 3000,
@@ -233,7 +243,8 @@ export const SERVER_CONSTANTS = {
   },
   ENV: {
     PORT: "PORT",
-    MONGO_URI: "MONGO_URI"
+    MONGO_URI: "MONGO_URI",
+    PRODUCTION_URL: "PRODUCTION_URL"
   },
   ROUTES: {
     API_DOCS: "/api-docs",
@@ -255,5 +266,3 @@ export const SERVER_CONSTANTS = {
     MONGO_CONNECTION_ERROR: "MongoDB connection error:"
   }
 };
-
-
