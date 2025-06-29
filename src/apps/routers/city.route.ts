@@ -1,5 +1,11 @@
 import express from "express";
 import { CityController } from "../controllers/city.controller";
+import {
+  CITY_ROUTE_PATHS,
+  CITY_ROUTE_TAG,
+  CITY_FIELDS,
+  CITY_MESSAGES
+} from "../../infrasturcture/constants/city.contstants";
 
 const cityRouter = express.Router();
 const cityController = new CityController();
@@ -40,7 +46,7 @@ const cityController = new CityController();
  *                 data:
  *                   $ref: "#/components/schemas/City"
  */
-cityRouter.post("/", (req, res, next) => {
+cityRouter.post(CITY_ROUTE_PATHS.BASE, (req, res, next) => {
   cityController.create(req, res, next);
 });
 
@@ -87,7 +93,7 @@ cityRouter.post("/", (req, res, next) => {
  *                 data:
  *                   $ref: "#/components/schemas/City"
  */
-cityRouter.put("/:id", (req, res, next) => {
+cityRouter.put(CITY_ROUTE_PATHS.BY_ID, (req, res, next) => {
   cityController.update(req, res, next);
 });
 
@@ -115,7 +121,7 @@ cityRouter.put("/:id", (req, res, next) => {
  *                 message:
  *                   type: string
  */
-cityRouter.delete("/:id", (req, res, next) => {
+cityRouter.delete(CITY_ROUTE_PATHS.BY_ID, (req, res, next) => {
   cityController.delete(req, res, next);
 });
 
@@ -195,7 +201,7 @@ cityRouter.delete("/:id", (req, res, next) => {
  *                     itemsPerPage:
  *                       type: integer
  */
-cityRouter.get("/", (req, res, next) => {
+cityRouter.get(CITY_ROUTE_PATHS.BASE, (req, res, next) => {
   cityController.getAll(req, res, next);
 });
 

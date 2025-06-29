@@ -1,4 +1,5 @@
 import { CityUsecase } from "../usecases/city.usecase";
+import { CITY_MESSAGES } from "../../infrasturcture/constants/city.contstants";
 
 /**
  * Controller for cities.
@@ -25,7 +26,7 @@ export class CityController {
   async create(req: any, res: any, next: any) {
     try {
       const city = await this.usecase.addCity(req.body);
-      res.status(201).json({ message: "City added successfully", data: city });
+      res.status(201).json({ message: CITY_MESSAGES.ADDED, data: city });
     } catch (error: any) {
       next(error);
     }
@@ -42,7 +43,7 @@ export class CityController {
   async update(req: any, res: any, next: any) {
     try {
       const city = await this.usecase.updateCity(req.params.id, req.body);
-      res.status(200).json({ message: "City updated successfully", data: city });
+      res.status(200).json({ message: CITY_MESSAGES.UPDATED, data: city });
     } catch (error: any) {
       next(error);
     }
@@ -59,7 +60,7 @@ export class CityController {
   async delete(req: any, res: any, next: any) {
     try {
       await this.usecase.deleteCity(req.params.id);
-      res.status(200).json({ message: "City deleted successfully" });
+      res.status(200).json({ message: CITY_MESSAGES.DELETED });
     } catch (error: any) {
       next(error);
     }

@@ -1,6 +1,7 @@
 import CityModel, { ICity } from "../models/city.model";
 import { buildSearchQuery } from "../utils/search.utils";
 import { paginateData } from "../utils/pagination.utils";
+import { DEFAULTS } from "../../infrasturcture/constants/city.contstants";
 
 /**
  * Repository class for handling operations related to cities.
@@ -73,8 +74,8 @@ export class CityRepository {
     searchKey?: string,
     page?: number,
     limit?: number,
-    sortBy: string = "name",
-    order: string = "asc",
+    sortBy: string = DEFAULTS.SORT_BY,
+    order: string = DEFAULTS.ORDER,
     filter?: object,
     projection?: Record<string, 0 | 1> | string
   ) {
@@ -82,7 +83,6 @@ export class CityRepository {
     const totalItems = await this.getTotalCount(query);
     const cities = await this.fetchCities(query, sortBy, order, page, limit, projection);
     const metadata = this.buildMetadata(cities, totalItems, page, limit);
-
     return { data: cities, metadata };
   }
 

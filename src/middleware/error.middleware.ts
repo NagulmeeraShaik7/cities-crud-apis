@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import Logger from "../apps/utils/logger.utils"; // Simplified logger for demonstration
+import Logger from "../apps/utils/logger.utils";
+import { ERROR_CONSTANTS } from "../infrasturcture/constants/city.contstants";
 
 /**
  * Middleware to handle errors in the application.
@@ -15,13 +16,15 @@ export default function errorMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  const status = error.status || 500;
-  const message = error.message || "Internal Server Error";
-  Logger.error(`Error: ${message}, Status: ${status}`);
+  const status = error.status || ERROR_CONSTANTS.DEFAULT_STATUS;
+  const message = error.message || ERROR_CONSTANTS.DEFAULT_MESSAGE;
+
+  Logger.error(`${ERROR_CONSTANTS.LOG_PREFIX}: ${message}, ${ERROR_CONSTANTS.STATUS_KEY}: ${status}`);
+
   res.status(status).json({
-    error: {
-      message,
-      status
+    [ERROR_CONSTANTS.RESPONSE_KEY]: {
+      [ERROR_CONSTANTS.MESSAGE_KEY]: message,
+      [ERROR_CONSTANTS.STATUS_KEY]: status
     }
   });
 }

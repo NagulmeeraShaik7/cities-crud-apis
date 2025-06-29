@@ -1,44 +1,56 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import { SwaggerOptions } from "swagger-ui-express";
+import {
+  SWAGGER,
+  SCHEMAS,
+  CITY_FIELDS,
+  ERROR_FIELDS
+} from "../constants/city.contstants";
 
 const swaggerOptions: swaggerJsdoc.Options = {
   definition: {
-    openapi: "3.0.0",
+    openapi: SWAGGER.OPENAPI_VERSION,
     info: {
-      title: "City Management API",
-      version: "1.0.0",
-      description: "API for managing a collection of cities with CRUD operations, pagination, filtering, sorting, and searching."
+      title: SWAGGER.TITLE,
+      version: SWAGGER.VERSION,
+      description: SWAGGER.DESCRIPTION
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 3000}`,
-        description: "Local server"
+        url: `${SWAGGER.PROTOCOL}://${SWAGGER.HOST}:${process.env.PORT || SWAGGER.DEFAULT_PORT}`,
+        description: SWAGGER.LOCAL_SERVER_DESCRIPTION
       }
     ],
     components: {
       schemas: {
-        City: {
-          type: "object",
+        [SCHEMAS.CITY]: {
+          type: SWAGGER.OBJECT_TYPE,
           properties: {
-            _id: { type: "string", example: "507f1f77bcf86cd799439011" },
-            name: { type: "string", example: "Tokyo" },
-            population: { type: "number", example: 37400068 },
-            country: { type: "string", example: "Japan" },
-            latitude: { type: "number", example: 35.6895 },
-            longitude: { type: "number", example: 139.6917 },
-            createdAt: { type: "string", format: "date-time" },
-            updatedAt: { type: "string", format: "date-time" }
+            [CITY_FIELDS.ID]: { type: SWAGGER.STRING_TYPE, example: SWAGGER.EXAMPLES.ID },
+            [CITY_FIELDS.NAME]: { type: SWAGGER.STRING_TYPE, example: SWAGGER.EXAMPLES.CITY_NAME },
+            [CITY_FIELDS.POPULATION]: { type: SWAGGER.NUMBER_TYPE, example: SWAGGER.EXAMPLES.POPULATION },
+            [CITY_FIELDS.COUNTRY]: { type: SWAGGER.STRING_TYPE, example: SWAGGER.EXAMPLES.COUNTRY },
+            [CITY_FIELDS.LATITUDE]: { type: SWAGGER.NUMBER_TYPE, example: SWAGGER.EXAMPLES.LATITUDE },
+            [CITY_FIELDS.LONGITUDE]: { type: SWAGGER.NUMBER_TYPE, example: SWAGGER.EXAMPLES.LONGITUDE },
+            [CITY_FIELDS.CREATED_AT]: { type: SWAGGER.STRING_TYPE, format: SWAGGER.FORMATS.DATE_TIME },
+            [CITY_FIELDS.UPDATED_AT]: { type: SWAGGER.STRING_TYPE, format: SWAGGER.FORMATS.DATE_TIME }
           },
-          required: ["name", "population", "country", "latitude", "longitude"]
+          required: [
+            CITY_FIELDS.NAME,
+            CITY_FIELDS.POPULATION,
+            CITY_FIELDS.COUNTRY,
+            CITY_FIELDS.LATITUDE,
+            CITY_FIELDS.LONGITUDE
+          ]
         },
-        Error: {
-          type: "object",
+        [SCHEMAS.ERROR]: {
+          type: SWAGGER.OBJECT_TYPE,
           properties: {
-            error: {
-              type: "object",
+            [ERROR_FIELDS.ERROR]: {
+              type: SWAGGER.OBJECT_TYPE,
               properties: {
-                message: { type: "string", example: "Internal Server Error" },
-                status: { type: "integer", example: 500 }
+                [ERROR_FIELDS.MESSAGE]: { type: SWAGGER.STRING_TYPE, example: SWAGGER.EXAMPLES.ERROR_MESSAGE },
+                [ERROR_FIELDS.STATUS]: { type: SWAGGER.INTEGER_TYPE, example: SWAGGER.EXAMPLES.STATUS }
               }
             }
           }
@@ -46,7 +58,7 @@ const swaggerOptions: swaggerJsdoc.Options = {
       }
     }
   },
-  apis: ["./src/apps/routers/*.ts"]
+  apis: [SWAGGER.API_FILES_GLOB]
 };
 
 const swaggerSpecs: SwaggerOptions = swaggerJsdoc(swaggerOptions);
