@@ -19,6 +19,10 @@ const swaggerOptions: swaggerJsdoc.Options = {
       {
         url: `${SWAGGER.PROTOCOL}://${SWAGGER.HOST}:${process.env.PORT || SWAGGER.DEFAULT_PORT}`,
         description: SWAGGER.LOCAL_SERVER_DESCRIPTION
+      },
+      {
+        url: SWAGGER.PRODUCTION_URL,
+        description: SWAGGER.PRODUCTION_SERVER_DESCRIPTION
       }
     ],
     components: {
