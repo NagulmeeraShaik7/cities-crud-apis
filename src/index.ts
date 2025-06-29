@@ -7,104 +7,50 @@ import swaggerSpecs from "./infrasturcture/config/swaggerConfig";
 import cityRouter from "./apps/routers/city.route";
 import errorMiddleware from "./middleware/error.middleware";
 import Logger from "./apps/utils/logger.utils";
+import { SERVER_CONSTANTS } from "./infrasturcture/constants/city.contstants";
 
-/**
- * Connects to the MongoDB database using the provided URI.
- * Ensures that the database connection is established before proceeding with the server setup.
- * Logs success or error messages accordingly
- * @async
- * @function
- * @returns {Promise<void>} Resolves if the connection is successful, rejects otherwise.
- */
 const connectToDatabase = async () => {
   try {
-    const MONGODB_URI = process.env.MONGO_URI;
-    //console.log("MONGODB_URI-------------:", MONGODB_URI); // Debugging line to check the URI
+    const MONGODB_URI = process.env[SERVER_CONSTANTS.ENV.MONGO_URI];
     if (!MONGODB_URI) {
-      throw new Error("MONGO_URI environment variable is not defined");
+      throw new Error(SERVER_CONSTANTS.ERRORS.MONGO_URI_UNDEFINED);
     }
-    //Logger.info(`Attempting to connect to MongoDB with URI: ${MONGODB_URI}`);
-    await mongoose.connect(MONGODB_URI, {
-      // Optional for Mongoose 7, but included for compatibility
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-    });
-    Logger.info("Connected to MongoDB");
+    await mongoose.connect(MONGODB_URI);
+    Logger.info(SERVER_CONSTANTS.LOGS.MONGO_CONNECTED);
   } catch (error) {
-    Logger.error("MongoDB connection error:", error);
+    Logger.error(SERVER_CONSTANTS.LOGS.MONGO_CONNECTION_ERROR, error);
     throw error;
   }
 };
 
-/**
- * Express application instance.
- * @constant {object}
- */
 const app = express();
+const port = process.env[SERVER_CONSTANTS.ENV.PORT] || SERVER_CONSTANTS.DEFAULTS.PORT;
+const localhostURL = `${SERVER_CONSTANTS.DEFAULTS.HOST}:${port}`;
 
-/**
- * Port number for the server.
- * @constant {number}
- */
-const port = process.env.PORT || 3000;
-
-// Log environment variables for debugging
-Logger.info(`Environment variables - PORT: ${process.env.PORT}, MONGO_URI: ${process.env.MONGO_URI}`);
-
-// Connect to the database before starting the server
 connectToDatabase();
 
-// Middleware setup
-/**
- * Middleware to parse JSON data in incoming requests.
- * @function
- */
 app.use(express.json());
 
-/**
- * Setup Swagger UI for API documentation.
- * Serves Swagger UI at the specified base URL and provides the generated specifications.
- * @function
- */
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-Logger.info(`Swagger UI available at http://localhost:${port}/api-docs`);
+app.use(
+  SERVER_CONSTANTS.ROUTES.API_DOCS,
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpecs)
+);
+Logger.info(`${SERVER_CONSTANTS.LOGS.SWAGGER_AVAILABLE} ${SERVER_CONSTANTS.DEFAULTS.PROTOCOL}://${localhostURL}${SERVER_CONSTANTS.ROUTES.API_DOCS}`);
 
-/**
- * Root route to check if the server is running.
- * Logs a message indicating the server is active.
- * @function
- * @param {object} req - HTTP request object.
- * @param {object} res - HTTP response object.
- */
-app.get("/", (req, res) => {
-  res.send("City Management API is running");
-  Logger.info("City Management API is running");
+app.get(SERVER_CONSTANTS.ROUTES.ROOT, (req, res) => {
+  res.send(SERVER_CONSTANTS.MESSAGES.API_RUNNING);
+  Logger.info(SERVER_CONSTANTS.LOGS.API_RUNNING);
 });
 
-/**
- * Route for city-related endpoints.
- * Logs a message when the route is set.
- * @function
- */
-app.use("/api/cities", cityRouter);
-Logger.info("API cities Route set: /api/cities");
+app.use(SERVER_CONSTANTS.ROUTES.CITIES, cityRouter);
+Logger.info(`${SERVER_CONSTANTS.LOGS.CITY_ROUTE} ${SERVER_CONSTANTS.ROUTES.CITIES}`);
 
-// Global error handler
 app.use(errorMiddleware);
 
-/**
- * Start the HTTP server and listen on the specified port.
- * Logs the server's URL on successful startup.
- * @function
- */
 const server = http.createServer(app);
-
 server.listen(port, () => {
-  Logger.info(`Server running at http://localhost:${port}`);
+  Logger.info(`${SERVER_CONSTANTS.LOGS.SERVER_RUNNING} ${SERVER_CONSTANTS.DEFAULTS.PROTOCOL}://${localhostURL}`);
 });
 
-/**
- * Export the Express application instance.
- * @module
- */
 export default app;
