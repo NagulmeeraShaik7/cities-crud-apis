@@ -1,5 +1,6 @@
 import { CityRepository } from "../repositories/city.repository";
 import { ICity } from "../models/city.model";
+import { CITY_ERRORS } from "../../infrasturcture/constants/city.contstants";
 
 /**
  * Use case layer for cities.
@@ -25,7 +26,7 @@ export class CityUsecase {
   async addCity(city: Partial<ICity>): Promise<ICity> {
     const existingCity = await this.repository.findByName(city.name!);
     if (existingCity) {
-      throw new Error("City name must be unique");
+      throw new Error(CITY_ERRORS.NAME_UNIQUE);
     }
     return await this.repository.create(city);
   }
@@ -41,12 +42,12 @@ export class CityUsecase {
   async updateCity(id: string, city: Partial<ICity>): Promise<ICity> {
     const existingCity = await this.repository.findById(id);
     if (!existingCity) {
-      throw new Error("City not found");
+      throw new Error(CITY_ERRORS.NOT_FOUND);
     }
     if (city.name && city.name !== existingCity.name) {
       const nameExists = await this.repository.findByName(city.name);
       if (nameExists) {
-        throw new Error("City name must be unique");
+        throw new Error(CITY_ERRORS.NAME_UNIQUE);
       }
     }
     return (await this.repository.update(id, city))!;
@@ -62,7 +63,7 @@ export class CityUsecase {
   async deleteCity(id: string): Promise<void> {
     const city = await this.repository.findById(id);
     if (!city) {
-      throw new Error("City not found");
+      throw new Error(CITY_ERRORS.NOT_FOUND);
     }
     await this.repository.delete(id);
   }

@@ -1,3 +1,5 @@
+import { LOGGER_PREFIX } from "../../infrasturcture/constants/city.contstants";
+
 /**
  * Simple logger utility for demonstration purposes.
  */
@@ -8,7 +10,7 @@ export default class Logger {
    * @param {...any} args - Additional arguments to log.
    */
   static info(message: string, ...args: any[]) {
-    console.log(`[INFO] ${message}`, ...args);
+    console.log(`${LOGGER_PREFIX.INFO} ${message}`, ...args);
   }
 
   /**
@@ -17,6 +19,6 @@ export default class Logger {
    * @param {...any} args - Additional arguments to log.
    */
   static error(message: string, ...args: any[]) {
-    console.error(`[ERROR] ${message}`, ...args);
+    console.error(`${LOGGER_PREFIX.ERROR} ${message}`, ...args);
   }
 }
